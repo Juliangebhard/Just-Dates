@@ -12,7 +12,7 @@ export default function Dashboard() {
     setCurrentDate(new Date());
   }, []);
   
-  // Calendar data for June 2024
+  // Calendar data for June 2025
   const calendarMonth = 5; // June (0-indexed)
   const calendarYear = 2025;
   const daysInJune = Array.from({ length: 30 }, (_, i) => i + 1);
@@ -62,7 +62,7 @@ export default function Dashboard() {
               let dayClasses = "h-8 flex items-center justify-center text-sm rounded relative ";
               
               if (isHighlighted) {
-                dayClasses += "bg-pink-500 text-white font-semibold ";
+                dayClasses += "bg-[#E8F0FE] text-blue-700 font-semibold ";
               } else {
                 dayClasses += "text-gray-700 hover:bg-gray-100 ";
               }
@@ -84,7 +84,7 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-gray-800">Your next date</h2>
-            <button className="bg-pink-500 hover:bg-pink-600 text-white p-2 rounded-full transition-colors shadow-sm">
+            <button className="bg-[#E8F0FE] hover:bg-[#D2E3FC] text-blue-700 p-2 rounded-full transition-colors shadow-sm">
               <Plus className="w-5 h-5" />
             </button>
           </div>
@@ -112,7 +112,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           {/* House - Far Left - Active */}
           <button className="flex flex-col items-center space-y-1 p-2">
-            <Home className="w-6 h-6 text-pink-500" />
+            <Home className="w-6 h-6 text-blue-600" />
           </button>
 
           {/* Calendar */}
@@ -132,8 +132,8 @@ export default function Dashboard() {
           {/* Profile Avatar - Far Right */}
           <Link href="/profile">
             <button className="flex flex-col items-center space-y-1 p-2">
-              <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-[#E8F0FE] rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-blue-700" />
               </div>
             </button>
           </Link>

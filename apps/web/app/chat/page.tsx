@@ -121,7 +121,7 @@ export default function Chat() {
       {/* Fixed Header with Profile */}
       <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40">
         {/* Time Left Banner */}
-        <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2">
           <div className="flex items-center justify-center space-x-2">
             <Clock className="w-4 h-4" />
             <span className="text-sm font-medium">13h chat left</span>
@@ -155,13 +155,13 @@ export default function Chat() {
             <div
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                 message.isOwn
-                  ? 'bg-pink-500 text-white'
+                  ? 'bg-[#E8F0FE] text-blue-700'
                   : 'bg-white text-gray-800 border border-gray-200'
               }`}
             >
               <p className="text-sm">{message.text}</p>
               <p className={`text-xs mt-1 ${
-                message.isOwn ? 'text-pink-100' : 'text-gray-500'
+                message.isOwn ? 'text-blue-500' : 'text-gray-500'
               }`}>
                 {message.time}
               </p>
@@ -178,9 +178,9 @@ export default function Chat() {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <button className="bg-pink-500 hover:bg-pink-600 text-white p-2 rounded-full transition-colors">
+          <button className="bg-[#E8F0FE] hover:bg-[#D2E3FC] text-blue-700 p-2 rounded-full transition-colors">
             <Send className="w-5 h-5" />
           </button>
         </div>
@@ -205,14 +205,14 @@ export default function Chat() {
 
           {/* Chat - Active */}
           <button className="flex flex-col items-center space-y-1 p-2">
-            <MessageCircle className="w-6 h-6 text-pink-500" />
+            <MessageCircle className="w-6 h-6 text-blue-600" />
           </button>
 
           {/* Profile Avatar - Far Right */}
           <Link href="/profile">
             <button className="flex flex-col items-center space-y-1 p-2">
-              <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-[#E8F0FE] rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-blue-700" />
               </div>
             </button>
           </Link>

@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   
   // Set current date on client side to avoid hydration mismatch
   useEffect(() => {
@@ -16,133 +15,55 @@ export default function CalendarView() {
     setSelectedDate(today);
   }, []);
 
-  // Auto-scroll to current date when page loads
-  useEffect(() => {
-    if (currentDate && scrollContainerRef.current) {
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth();
-      
-      // Wait a bit for the DOM to be ready
-      setTimeout(() => {
-        const yearElement = document.getElementById(`year-${currentYear}`);
-        if (yearElement) {
-          yearElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        }
-      }, 100);
+  // Generate next 30 days from today
+  const getNext30Days = () => {
+    if (!currentDate) return [];
+    
+    const days = [];
+    for (let i = 0; i < 30; i++) {
+      const date = new Date(currentDate);
+      date.setDate(currentDate.getDate() + i);
+      days.push(date);
     }
-  }, [currentDate]);
-
-  // Generate years from 2020 to 2030
-  const years = Array.from({ length: 11 }, (_, i) => 2020 + i);
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-  const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
-  // Get days in month
-  const getDaysInMonth = (year: number, month: number) => {
-    return new Date(year, month + 1, 0).getDate();
+    return days;
   };
 
-  // Get first day of month (0 = Sunday)
-  const getFirstDayOfMonth = (year: number, month: number) => {
-    return new Date(year, month, 1).getDay();
-  };
+  const next30Days = getNext30Days();
 
   // Check if date is today
-  const isToday = (year: number, month: number, day: number) => {
+  const isToday = (date: Date) => {
     if (!currentDate) return false;
-    return currentDate.getFullYear() === year &&
-           currentDate.getMonth() === month &&
-           currentDate.getDate() === day;
+    return currentDate.toDateString() === date.toDateString();
   };
 
   // Check if date is selected
-  const isSelected = (year: number, month: number, day: number) => {
+  const isSelected = (date: Date) => {
     if (!selectedDate) return false;
-    return selectedDate.getFullYear() === year &&
-           selectedDate.getMonth() === month &&
-           selectedDate.getDate() === day;
+    return selectedDate.toDateString() === date.toDateString();
   };
 
-  // Check if date is highlighted (June 15, 2024) - same as dashboard
-  const isHighlighted = (year: number, month: number, day: number) => {
-    return year === 2024 && month === 5 && day === 15; // June = month 5 (0-indexed)
+  // Check if date is highlighted (June 15, 2024)
+  const isHighlighted = (date: Date) => {
+    return date.getFullYear() === 2024 && 
+           date.getMonth() === 5 && 
+           date.getDate() === 15;
   };
 
-  const renderMonth = (year: number, monthIndex: number) => {
-    const daysInMonth = getDaysInMonth(year, monthIndex);
-    const firstDay = getFirstDayOfMonth(year, monthIndex);
-    const days = [];
+  // Format day name
+  const getDayName = (date: Date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
+  };
 
-    // Empty cells for days before month starts
-    for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="h-10"></div>);
-    }
-
-    // Days of the month
-    for (let day = 1; day <= daysInMonth; day++) {
-      const todayClass = isToday(year, monthIndex, day);
-      const selectedClass = isSelected(year, monthIndex, day);
-      const highlightedClass = isHighlighted(year, monthIndex, day);
-
-      let dayClasses = "h-10 flex items-center justify-center text-sm rounded-lg cursor-pointer transition-colors ";
-      
-      if (highlightedClass) {
-        // Same styling as dashboard for June 15
-        dayClasses += "bg-pink-500 text-white font-semibold ";
-      } else if (selectedClass) {
-        dayClasses += "bg-blue-500 text-white font-semibold ";
-      } else if (todayClass) {
-        // Same styling as dashboard for today's date
-        dayClasses += "ring-2 ring-blue-500 ring-offset-1 text-blue-600 font-semibold ";
-      } else {
-        dayClasses += "text-gray-700 hover:bg-gray-100 ";
-      }
-
-      days.push(
-        <div
-          key={day}
-          className={dayClasses}
-          onClick={() => setSelectedDate(new Date(year, monthIndex, day))}
-        >
-          {day}
-        </div>
-      );
-    }
-
-    return (
-      <div className="bg-white rounded-lg p-4 shadow-sm mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          {months[monthIndex]} {year}
-        </h3>
-        
-        {/* Days of week header */}
-        <div className="grid grid-cols-7 gap-1 mb-2">
-          {dayNames.map((day) => (
-            <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">
-              {day}
-            </div>
-          ))}
-        </div>
-        
-        {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-1">
-          {days}
-        </div>
-      </div>
-    );
+  // Format month name
+  const getMonthName = (date: Date) => {
+    return date.toLocaleDateString('en-US', { month: 'short' });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-4 sticky top-0 z-10">
-        <h1 className="text-2xl font-bold text-gray-800">Calendar</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Next 30 Days</h1>
         {selectedDate && (
           <p className="text-sm text-gray-600 mt-1">
             Selected: {selectedDate.toLocaleDateString('en-US', { 
@@ -155,23 +76,83 @@ export default function CalendarView() {
         )}
       </div>
 
-      {/* Scrollable Calendar Content */}
-      <div ref={scrollContainerRef} className="p-4 space-y-6 overflow-y-auto">
-        {years.map((year) => (
-          <div key={year} id={`year-${year}`} className="space-y-6">
-            {/* Year Header */}
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-6">{year}</h2>
-            </div>
+      {/* Calendar Grid */}
+      <div className="p-4">
+        <div className="bg-white rounded-lg p-4 shadow-sm">
+          {/* Grid Container */}
+          <div className="grid grid-cols-7 gap-2">
+            {/* Weekday Headers */}
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
+              <div key={index} className="aspect-square flex items-center justify-center text-sm font-semibold text-gray-500 pb-2">
+                {day}
+              </div>
+            ))}
             
-            {/* Months for this year */}
-            <div className="space-y-4">
-              {months.map((_, monthIndex) => (
-                renderMonth(year, monthIndex)
-              ))}
-            </div>
+            {/* Empty cells to align first date to correct weekday */}
+            {currentDate && Array.from({ length: (currentDate.getDay() + 6) % 7 }, (_, index) => (
+              <div key={`empty-${index}`} className="aspect-square"></div>
+            ))}
+            
+            {next30Days.map((date, index) => {
+              const todayClass = isToday(date);
+              const selectedClass = isSelected(date);
+              const highlightedClass = isHighlighted(date);
+              const isNewMonth = index === 0 || date.getMonth() !== next30Days[index - 1]?.getMonth();
+
+              let cellClasses = "aspect-square flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer transition-all hover:shadow-sm border ";
+              
+              if (highlightedClass) {
+                cellClasses += "bg-[#E8F0FE] border-blue-300 text-blue-700 ";
+              } else if (selectedClass) {
+                cellClasses += "bg-blue-500 border-blue-500 text-white ";
+              } else if (todayClass) {
+                cellClasses += "ring-2 ring-blue-500 ring-offset-1 text-blue-600 border-blue-200 ";
+              } else {
+                cellClasses += "border-gray-200 hover:border-gray-300 hover:bg-gray-50 ";
+              }
+
+              return (
+                <>
+                  {/* Month Divider */}
+                  {isNewMonth && index > 0 && (
+                    <div className="col-span-7 flex items-center my-4">
+                      <div className="flex-1 h-px bg-gray-200"></div>
+                      <div className="px-4 text-sm font-semibold text-gray-600">
+                        {date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                      </div>
+                      <div className="flex-1 h-px bg-gray-200"></div>
+                    </div>
+                  )}
+                  
+                  <div
+                    key={index}
+                    className={cellClasses}
+                    onClick={() => setSelectedDate(new Date(date))}
+                  >
+                    {/* Day Number */}
+                    <div className={`text-lg font-semibold ${
+                      highlightedClass ? 'text-blue-700' : 
+                      selectedClass ? 'text-white' : 
+                      todayClass ? 'text-blue-600' : 'text-gray-800'
+                    }`}>
+                      {date.getDate()}
+                    </div>
+                    
+                    {/* Status Indicators */}
+                    <div className="flex flex-col items-center space-y-1 mt-1">
+                      {todayClass && (
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      )}
+                      {highlightedClass && (
+                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            })}
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Bottom Navigation Bar */}
@@ -186,7 +167,7 @@ export default function CalendarView() {
 
           {/* Calendar - Active */}
           <button className="flex flex-col items-center space-y-1 p-2">
-            <Calendar className="w-6 h-6 text-pink-500" />
+            <Calendar className="w-6 h-6 text-blue-600" />
           </button>
 
           {/* Chat */}
@@ -199,8 +180,8 @@ export default function CalendarView() {
           {/* Profile Avatar - Far Right */}
           <Link href="/profile">
             <button className="flex flex-col items-center space-y-1 p-2">
-              <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-[#E8F0FE] rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-blue-700" />
               </div>
             </button>
           </Link>

@@ -27,7 +27,7 @@ export default function Profile() {
           <div className="flex items-center space-x-3">
             <button 
               onClick={() => setIsEditing(!isEditing)}
-              className="p-2 text-gray-600 hover:text-pink-500 transition-colors"
+              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
             >
               <Edit3 className="w-5 h-5" />
             </button>
@@ -79,7 +79,7 @@ export default function Profile() {
                 {userProfile.interests.map((interest, index) => (
                   <span 
                     key={index}
-                    className="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm"
+                    className="px-3 py-1 bg-[#E8F0FE] text-blue-700 rounded-full text-sm"
                   >
                     {interest}
                   </span>
@@ -159,8 +159,8 @@ export default function Profile() {
 
           {/* Profile Avatar - Far Right - Active */}
           <button className="flex flex-col items-center space-y-1 p-2">
-            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 bg-[#E8F0FE] rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-blue-700" />
             </div>
           </button>
         </div>
