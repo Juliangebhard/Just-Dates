@@ -3,6 +3,7 @@
 import { Home, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import React from "react";
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -82,7 +83,7 @@ export default function CalendarView() {
           {/* Grid Container */}
           <div className="grid grid-cols-7 gap-2">
             {/* Weekday Headers */}
-            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
+            {['M', 'T', 'W', 'T', 'F', 'Sa', 'Su'].map((day, index) => (
               <div key={index} className="aspect-square flex items-center justify-center text-sm font-semibold text-gray-500 pb-2">
                 {day}
               </div>
@@ -112,7 +113,7 @@ export default function CalendarView() {
               }
 
               return (
-                <>
+                <React.Fragment key={index}>
                   {/* Month Divider */}
                   {isNewMonth && index > 0 && (
                     <div className="col-span-7 flex items-center my-4">
@@ -125,7 +126,6 @@ export default function CalendarView() {
                   )}
                   
                   <div
-                    key={index}
                     className={cellClasses}
                     onClick={() => setSelectedDate(new Date(date))}
                   >
@@ -148,7 +148,7 @@ export default function CalendarView() {
                       )}
                     </div>
                   </div>
-                </>
+                </React.Fragment>
               );
             })}
           </div>

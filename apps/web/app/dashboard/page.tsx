@@ -40,7 +40,7 @@ export default function Dashboard() {
           
           {/* Days of week header */}
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) => (
+            {['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'].map((day) => (
               <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
                 {day}
               </div>
@@ -97,7 +97,7 @@ export default function Dashboard() {
               {/* Name */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Max Mustermann</h3>
-                <p className="text-sm text-gray-500">Photography • Hiking • Italian Food</p>
+                <p className="text-sm text-gray-500">Sport | Tennis</p>
               </div>
             </div>
           </div>
