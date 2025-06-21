@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Calendar, MessageCircle, User, Plus } from "lucide-react";
+import { Home, Calendar, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -84,9 +84,6 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-gray-800">Your next date</h2>
-            <button className="bg-[#E8F0FE] hover:bg-[#D2E3FC] text-blue-700 p-2 rounded-full transition-colors shadow-sm">
-              <Plus className="w-5 h-5" />
-            </button>
           </div>
           
           {/* Profile Banner */}

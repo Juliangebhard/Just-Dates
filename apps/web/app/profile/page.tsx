@@ -9,13 +9,14 @@ export default function Profile() {
 
   // User profile data
   const userProfile = {
-    name: "Antonia Sander :)",
+    name: "Antonia Sander",
     age: 28,
     location: "Berlin, Deutschland",
     occupation: "Software Developer",
     bio: "Ich liebe es, neue Leute kennenzulernen und gemeinsam schöne Momente zu erleben. In meiner Freizeit fotografiere ich gerne und gehe wandern.",
     interests: ["Wandern", "Fotografie", "Kochen", "Reisen"],
-    joinDate: "März 2024"
+    joinDate: "März 2024",
+    trustScore: 87
   };
 
   return (
@@ -42,13 +43,26 @@ export default function Profile() {
           <div className="flex flex-col items-center text-center space-y-4">
             {/* Large Profile Picture */}
             <div className="w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-4xl">MM</span>
+              <span className="text-white font-bold text-4xl">AS</span>
             </div>
             
             {/* Name and Age */}
             <div>
               <h2 className="text-2xl font-bold text-gray-800">{userProfile.name}</h2>
               <p className="text-lg text-gray-600">{userProfile.age} Jahre</p>
+              {/* Trust Score */}
+              <div className="mt-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full"
+                      style={{ width: `${userProfile.trustScore}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{userProfile.trustScore}%</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Vertrauenswürdigkeit</p>
+              </div>
             </div>
             
             {/* Location */}
@@ -64,13 +78,13 @@ export default function Profile() {
           
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Beruf</p>
-              <p className="text-gray-800">{userProfile.occupation}</p>
+              <p className="text-sm text-gray-600 mb-1">Bio</p>
+              <p className="text-gray-800">{userProfile.bio}</p>
             </div>
             
             <div>
-              <p className="text-sm text-gray-600 mb-1">Bio</p>
-              <p className="text-gray-800">{userProfile.bio}</p>
+              <p className="text-sm text-gray-600 mb-1">Beruf</p>
+              <p className="text-gray-800">{userProfile.occupation}</p>
             </div>
             
             <div>
