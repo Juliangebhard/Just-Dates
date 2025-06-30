@@ -3,11 +3,13 @@
 import { Home, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
+  const router = useRouter();
   
   // Set current date on client side to avoid hydration mismatch
   useEffect(() => {
@@ -48,6 +50,13 @@ export default function CalendarView() {
     return date.getFullYear() === 2024 && 
            date.getMonth() === 5 && 
            date.getDate() === 15;
+  };
+
+  // Handle day click - navigate to date creation page
+  const handleDayClick = (date: Date) => {
+    setSelectedDate(new Date(date));
+    const dateParam = date.toISOString();
+    router.push(`/dateCreationP1?date=${dateParam}`);
   };
 
   // Format day name
@@ -125,9 +134,9 @@ export default function CalendarView() {
                     </div>
                   )}
                   
-                  <div
+                  <button
                     className={cellClasses}
-                    onClick={() => setSelectedDate(new Date(date))}
+                    onClick={() => handleDayClick(date)}
                   >
                     {/* Day Number */}
                     <div className={`text-lg font-semibold ${
@@ -147,7 +156,7 @@ export default function CalendarView() {
                         <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                       )}
                     </div>
-                  </div>
+                  </button>
                 </React.Fragment>
               );
             })}
