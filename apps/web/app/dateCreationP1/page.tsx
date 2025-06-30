@@ -1,16 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Clock, Sun, Moon } from "lucide-react";
 import Link from "next/link";
 
 export default function DateCreationP1() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const selectedDate = searchParams.get('date');
-  
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<'early' | 'later' | null>(null);
+  const [isClient, setIsClient] = useState(false);
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const dateParam = searchParams.get('date');
+      setSelectedDate(dateParam);
+    } catch (error) {
+      console.log('Error getting search params:', error);
+    }
+  }, []);
 
   // Parse the selected date
   const parsedDate = selectedDate ? new Date(selectedDate) : new Date();
@@ -27,6 +38,15 @@ export default function DateCreationP1() {
     const nextStepUrl = `/dateCreationP2?date=${selectedDate}&time=${time}`;
     router.push(nextStepUrl);
   };
+
+  // Don't render until client-side
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

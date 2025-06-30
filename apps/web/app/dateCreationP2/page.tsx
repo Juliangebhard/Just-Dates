@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Check, Utensils, Film, Heart, Coffee, MapPin, Activity, Gamepad2, Car, Plane, Ship } from "lucide-react";
 import Link from "next/link";
@@ -20,13 +20,26 @@ interface Category {
 }
 
 export default function DateCreationP2() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const selectedDate = searchParams.get('date');
-  const selectedTime = searchParams.get('time');
-  
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const dateParam = searchParams.get('date');
+      const timeParam = searchParams.get('time');
+      setSelectedDate(dateParam);
+      setSelectedTime(timeParam);
+    } catch (error) {
+      console.log('Error getting search params:', error);
+    }
+  }, []);
 
   // Parse the selected date
   const parsedDate = selectedDate ? new Date(selectedDate) : new Date();
@@ -121,6 +134,15 @@ export default function DateCreationP2() {
   const toggleCategory = (categoryId: string) => {
     setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
   };
+
+  // Don't render until client-side
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
